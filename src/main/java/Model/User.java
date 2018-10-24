@@ -15,5 +15,6 @@ public class User {
     private Character sex;
     private Date birthday;
     private String country;
+    private Long id;
 
 }
