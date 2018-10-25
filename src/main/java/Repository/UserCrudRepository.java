@@ -32,6 +32,7 @@ public class UserCrudRepository implements CrudRepository<User> {
                    .hashPassword(resultSet.getString("hash_password"))
                    .birthday(resultSet.getDate("birthday"))
                    .sex(resultSet.getString("sex").charAt(0))
+                   .id(resultSet.getLong("id"))
                    .build();
         }
     };

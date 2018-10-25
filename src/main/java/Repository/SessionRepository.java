@@ -24,12 +24,15 @@ public class SessionRepository {
 
     //language=SQL
     public static final String SQL_SEARCH_SESSION_BY_KEY = "SELECT *, session.id AS session_id FROM session LEFT JOIN zdstyle_user u on session.user_id = u.id" +
-            " WHERE session.key=? AND session.user_id=?";
+            " WHERE session.user_id=?";
 
     //language=SQL
     public static final String SQL_UPDATE_KEY = "UPDATE session " +
             "SET key=? " +
             "WHERE session.user_id=? AND session.key=?";
+
+    //language=SQL
+    public static final String SQL_GET_KEY_BY_USER_ID = "SELECT *, session.id AS session_id FROM session LEFT JOIN zdstyle_user u on session.user_id = u.id WHERE user_id=?";
 
     public SessionRepository (DataSource dataSource){
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -64,12 +67,16 @@ public class SessionRepository {
         jdbcTemplate.update(SQL_DELEATE_SESSION, id);
     }
 
-    public Optional<Session> get(Long id, String key){
-        return Optional.of(jdbcTemplate.queryForObject(SQL_SEARCH_SESSION_BY_KEY, sessionRowMapper, key, id));
+    public Optional<Session> get(Long userId){
+        return Optional.of(jdbcTemplate.queryForObject(SQL_SEARCH_SESSION_BY_KEY, sessionRowMapper, userId));
     }
 
     public void updateKey(Session session, String newKey){
         jdbcTemplate.update(SQL_UPDATE_KEY, newKey, session.getUser().getId(), session.getKey());
+    }
+
+    public Optional<Session> getKey(Long userId){
+        return Optional.of(jdbcTemplate.queryForObject(SQL_GET_KEY_BY_USER_ID, sessionRowMapper, userId));
     }
 
 

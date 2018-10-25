@@ -8,6 +8,7 @@ import forms.SignUpForm;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.servlet.http.Cookie;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -60,6 +61,18 @@ public class UserServiceImpl implements UserService {
         }else {
             throw new IllegalArgumentException("Email is wrong");
         }
+    }
+
+    public Optional<User> getUser(SignInForm signInForm){
+        Optional<User> userOptional = userCrudRepository.fingOneByEmail(signInForm.getEmail());
+        if(userOptional.isPresent()){
+            User user = userOptional.get();
+            if(!passwordEncoder.matches(signInForm.getPassword(), user.getHashPassword())){
+               return null;
+            }
+            return Optional.of(user);
+        }
+        return null;
     }
 
 
