@@ -49,14 +49,14 @@ public class SignInServlet extends HttpServlet {
 
         System.out.println(user);
         Cookie userId = new Cookie("userId", user.getId().toString());
-        userId.setMaxAge(60);
+        userId.setMaxAge(60*5);
         response.addCookie(userId);
 
 
         String key = sessionService.getKey(user);
         System.out.println(key);
         Cookie userKey = new Cookie("userKey", key);
-        userKey.setMaxAge(60);
+        userKey.setMaxAge(60*5);
         response.addCookie(userKey);
 
         response.sendRedirect("/home");

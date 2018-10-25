@@ -28,15 +28,20 @@ public class LoginFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        System.out.println("12345");
+
         String userId = null;
         String userKey = null;
+
+        Cookie userIdCookie = null;
+        Cookie userKeyCookie = null;
         for (Cookie cookie : request.getCookies()){
             if(cookie.getName().equals("userId")){
                userId = cookie.getValue();
+               userIdCookie = cookie;
             }
             if(cookie.getName().equals("userKey")){
                 userKey = cookie.getValue();
+                userKeyCookie = cookie;
             }
 
         }
@@ -50,6 +55,9 @@ public class LoginFilter implements Filter {
                                 .key(userKey)
                                 .build());
             if(signIn){
+                userIdCookie.setMaxAge(60*20);
+                userKeyCookie.setMaxAge(60*20);
+                response.addCookie(userIdCookie);
                 filterChain.doFilter(request, response);
             }else {
                 request.getRequestDispatcher("/WEB-INF/jsp/SignInForm.jsp").forward(request, response);
