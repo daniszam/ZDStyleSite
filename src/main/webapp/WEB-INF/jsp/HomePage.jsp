@@ -39,16 +39,18 @@
     <p>Here you can create your own look</p>
 </div>
 
+
+
 <div class="wrap">
     <nav>
         <ul class="primary">
             <li>
-                <a href="">Shoes</a>
+                <a href="/products">Shoes</a>
                 <ul class="sub">
                     <li><a href="">Boots</a></li>
                     <li><a href="">Sneakers</a></li>
                     <li><a href="">Slippers</a></li>
-                    <li><a href="">Socks</a></li>
+                    <li><a href="/products">Socks</a></li>
                 </ul>
             </li>
             <li>

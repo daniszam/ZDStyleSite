@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
-@WebFilter("/home")
+@WebFilter(urlPatterns = {"/home","/products"})
 public class LoginFilter implements Filter {
 
     private SessionService sessionService;
@@ -55,8 +55,8 @@ public class LoginFilter implements Filter {
                                 .key(userKey)
                                 .build());
             if(signIn){
-                userIdCookie.setMaxAge(60*20);
-                userKeyCookie.setMaxAge(60*20);
+                userIdCookie.setMaxAge(60*24);
+                userKeyCookie.setMaxAge(60*24);
                 response.addCookie(userIdCookie);
                 filterChain.doFilter(request, response);
             }else {

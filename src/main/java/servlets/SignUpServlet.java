@@ -1,8 +1,12 @@
 package servlets;
 
+import Model.Session;
+import Model.User;
 import Repository.UserCrudRepository;
+import forms.SignInForm;
 import forms.SignUpForm;
 import lombok.SneakyThrows;
+import services.SessionService;
 import services.UserService;
 import services.UserServiceImpl;
 
@@ -24,11 +28,13 @@ import java.sql.Date;
 public class SignUpServlet extends HttpServlet {
 
     private UserService usersService;
+    private SessionService sessionService;
 
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
         ServletContext servletContext = servletConfig.getServletContext();
         usersService = (UserService) servletContext.getAttribute("usersService");
+        sessionService = (SessionService) servletContext.getAttribute("sessionService");
     }
 
     @SneakyThrows
@@ -60,7 +66,13 @@ public class SignUpServlet extends HttpServlet {
 
         PrintWriter printWriter = response.getWriter();
         if (usersService.signUp(signUpForm)) {
-            printWriter.print("Correct");
+           // printWriter.print("Correct");
+            User user = usersService.getUser(SignInForm.builder()
+                    .email(email)
+                    .password(password)
+                    .build())
+                    .get();
+            sessionService.create(user);
             response.sendRedirect("/signIn");
         } else {
             printWriter.println("<script type=\"text/javascript\">");

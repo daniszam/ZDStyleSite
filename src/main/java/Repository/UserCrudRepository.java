@@ -8,6 +8,7 @@ import javax.swing.tree.TreePath;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.List;
 import java.util.Optional;
 
 public class UserCrudRepository implements CrudRepository<User> {
@@ -47,13 +48,17 @@ public class UserCrudRepository implements CrudRepository<User> {
     @SneakyThrows
     public void save(User model) {
         System.out.println(model);
-        PreparedStatement preparedStatement = connection.prepareStatement(SQL_SAVE_USER);
+        PreparedStatement preparedStatement = connection.prepareStatement(SQL_SAVE_USER, PreparedStatement.RETURN_GENERATED_KEYS);
         preparedStatement.setString(1, model.getEmail());
         preparedStatement.setString(2, model.getHashPassword());
         preparedStatement.setString(3, String.valueOf(model.getSex()));
         preparedStatement.setDate(4, model.getBirthday());
         preparedStatement.setString(5,model.getCountry());
         preparedStatement.executeUpdate();
+        ResultSet resultSet = preparedStatement.getGeneratedKeys();
+        while (resultSet.next()) {
+            model.setId(resultSet.getLong("id"));
+        }
     }
 
     @SneakyThrows
@@ -70,5 +75,15 @@ public class UserCrudRepository implements CrudRepository<User> {
     @Override
     public void deleate(User model) {
 
+    }
+
+    @Override
+    public List<User> getAll() {
+        return null;
+    }
+
+    @Override
+    public Optional<User> getOne(Long id) {
+        return null;
     }
 }

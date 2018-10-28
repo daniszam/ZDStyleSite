@@ -42,21 +42,19 @@ public class SignInServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         SignInForm signInForm = new SignInForm(email, password);
-        System.out.println("1231241414");
         usersService.signIn(signInForm);
-        System.out.println("12124");
         User user = usersService.getUser(signInForm).get();
 
         System.out.println(user);
         Cookie userId = new Cookie("userId", user.getId().toString());
-        userId.setMaxAge(60*5);
+        userId.setMaxAge(60*24);
         response.addCookie(userId);
 
 
         String key = sessionService.getKey(user);
         System.out.println(key);
         Cookie userKey = new Cookie("userKey", key);
-        userKey.setMaxAge(60*5);
+        userKey.setMaxAge(60*24);
         response.addCookie(userKey);
 
         response.sendRedirect("/home");

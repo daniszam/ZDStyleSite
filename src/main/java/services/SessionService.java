@@ -20,6 +20,13 @@ public class SessionService  {
 
     }
 
+    public void create(User user){
+        sessionRepository.create(Session.builder()
+                .key(passwordEncoder
+                        .encode(user.getHashPassword()))
+                .user(user).build());
+    }
+
     public boolean check(Session session){
         if(sessionRepository.get(session.getUser().getId()) != null){
             Session sessionR = sessionRepository.get(session.getUser().getId()).get();

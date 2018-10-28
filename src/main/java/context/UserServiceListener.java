@@ -1,5 +1,8 @@
 package context;
 
+import Model.Product;
+import Repository.CartRepository;
+import Repository.ProductRepository;
 import Repository.SessionRepository;
 import Repository.UserCrudRepository;
 import lombok.SneakyThrows;
@@ -19,6 +22,8 @@ public class UserServiceListener implements ServletContextListener {
 
     private UserService usersService;
     private SessionService sessionService;
+    private ProductRepository productRepository;
+    private CartRepository cartRepository;
 
     private static final String USERNAME = "postgres";
     private static final String PASSWORD = "dREAM1cACAO";
@@ -40,11 +45,16 @@ public class UserServiceListener implements ServletContextListener {
         dataSource.setPassword(PASSWORD);
 
         UserCrudRepository userCrudRepository = new UserCrudRepository(connection);
+        productRepository = new ProductRepository(dataSource);
         usersService = new UserServiceImpl(userCrudRepository);
         sessionService = new SessionService(new SessionRepository(dataSource));
+        cartRepository = new CartRepository(dataSource);
+
         ServletContext servletContext = servletContextEvent.getServletContext();
+        servletContext.setAttribute("cartRepository", cartRepository);
         servletContext.setAttribute("usersService", usersService);
         servletContext.setAttribute("sessionService", sessionService);
+        servletContext.setAttribute("productRepository", productRepository);
     }
 
     @Override

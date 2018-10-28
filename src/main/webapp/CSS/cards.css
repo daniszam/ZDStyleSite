@@ -1,0 +1,47 @@
+body{
+    font-family:'Poiret One';
+    font-size: larger;
+}
+
+.w3-card-4{
+    height: 250px;
+    width: 300px;
+    border-radius: 5px;
+    margin-left: 30px ;
+}
+
+.w3-card-4 img{
+    height: 170px;
+    width: 300px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.buy {
+    flex: 1 1 auto;
+    margin-left: 10px;
+    padding: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    /* text-shadow: 0px 0px 10px rgba(0,0,0,0.2);*/
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+}
+
+button[class*=buy]{
+    margin-top: -16%;
+    width: 50px;
+    height: 40px;
+}
+
+
+.buy:hover {
+    background-position: right center; /* change the direction of the change here */
+}
+
+.btn-4 {
+    background-image: linear-gradient(to right, #a1c4fd 0%, #c2e9fb 51%, #a1c4fd 100%);
+}
