@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -42,7 +43,16 @@ public class ProductsServlet extends HttpServlet {
                 userId = Long.parseLong(cookie.getValue());
             }
         }
-        request.setAttribute("cart", cartRepository.getOne(userId).get().getProducts());
+        List<Product> productList = cartRepository.getOne(userId).get().getProducts();
+        if(productList==null){
+            productList = new ArrayList<>();
+        }else {
+            if (productList.get(0).getId() == 0) {
+                productList.clear();
+            }
+        }
+        System.out.println(productList);
+        request.setAttribute("cart", productList);
         request.getRequestDispatcher("/WEB-INF/jsp/ProductsPage.jsp").forward(request,response);
     }
 

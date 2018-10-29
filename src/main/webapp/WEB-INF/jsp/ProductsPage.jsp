@@ -42,7 +42,7 @@
 <body>
 
 
-<!div id="gradient" /-->
+<div id="gradient" style="width: auto; height: auto; min-height: 300%"/>
 
 <div class="wrap">
     <nav>

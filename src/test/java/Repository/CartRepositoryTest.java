@@ -40,6 +40,7 @@ public class CartRepositoryTest {
 
     @Test
     public void getOne() {
-        System.out.println(cartRepository.getOne(2L));
+        System.out.println(cartRepository.getOne(8L));
+        System.out.println(cartRepository.getOne(8L).get().getId());
     }
 }

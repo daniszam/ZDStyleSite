@@ -31,8 +31,11 @@ public class CartRepository implements CrudRepository<Cart> {
 
 
     //language=SQL
-    public static final String SQL_GET_CART_WITH_PRODUCT = "SELECT * FROM cart LEFT JOIN zdstyle_user u on cart.user_id = u.id" +
-            " LEFT JOIN cart_product  on cart.id = cart_product.cart_id LEFT JOIN product p on cart_product.product_id = p.id WHERE cart.user_id=?";
+    public static final String SQL_GET_CART_WITH_PRODUCT = "SELECT cart.id AS cart_id, u.id AS user_id, email, hash_password, sex, birthday, country, product_id, p.name AS product_name, img " +
+            "FROM cart " +
+            "LEFT JOIN zdstyle_user u on cart.user_id = u.id " +
+            "LEFT JOIN cart_product  on cart.id = cart_product.cart_id " +
+            "LEFT JOIN product p on cart_product.product_id = p.id WHERE cart.user_id=?";
     private JdbcTemplate jdbcTemplate;
     private Map<Cart, List<Product>> cartProductsMap;
     private Cart theOnlyCart;
@@ -61,12 +64,13 @@ public class CartRepository implements CrudRepository<Cart> {
            if(cartProductsMap.size() == 0){
                Cart cart = cartRowMapper.mapRow(resultSet, i);
                cartProductsMap.put(cart, new ArrayList<>());
+               System.out.println("1111");
                theOnlyCart = cart;
            }
            Product product = Product.builder()
                    .id(resultSet.getLong("product_id"))
                    .img(resultSet.getString("img"))
-                   .name(resultSet.getString("name"))
+                   .name(resultSet.getString("product_name"))
                    .build();
            cartProductsMap.get(theOnlyCart).add(product);
            return theOnlyCart;
@@ -102,10 +106,18 @@ public class CartRepository implements CrudRepository<Cart> {
     @Override
     public Optional<Cart> getOne(Long id) {
         cartProductsMap = new HashMap<>();
-        jdbcTemplate.query(SQL_GET_CART_WITH_PRODUCT, cartWithProductsRowMapper, id);
+
+        List<Cart> carts = jdbcTemplate.query(SQL_GET_CART_WITH_PRODUCT, cartWithProductsRowMapper, id);
+        if(carts.size()==0){
+            Cart cart = Cart.builder().user(User.builder().id(id).build()).build();
+            this.save(cart);
+            return Optional.of(cart);
+        }
+
         theOnlyCart.setProducts(cartProductsMap.get(theOnlyCart));
         Cart result = theOnlyCart;
         theOnlyCart = null;
+        System.out.println(result);
         return Optional.of(result);
     }
 
